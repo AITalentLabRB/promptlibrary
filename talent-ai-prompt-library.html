@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talent AI Lab — Recruiting Prompt Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f5;
+  --bg2: #f2ede5;
+  --bg3: #e8e2d8;
+  --ink: #1a1814;
+  --muted: #7a736a;
+  --faint: #c0b8ae;
+  --gold: #b8892a;
+  --gold-pale: #f5e9cc;
+  --forest: #2c4a35;
+  --forest-light: #3d6649;
+  --border: rgba(26,24,20,0.09);
+  --border-med: rgba(26,24,20,0.16);
+  --border-strong: rgba(26,24,20,0.26);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+
+/* TOP BAR */
+.top-bar{height:2px;background:linear-gradient(90deg,var(--forest) 0%,var(--gold) 50%,var(--forest) 100%);}
+
+/* NAV */
+nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 48px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:rgba(250,248,245,0.95);
+  backdrop-filter:blur(10px);z-index:200;
+}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;letter-spacing:0.01em;color:var(--ink);display:flex;align-items:baseline;gap:6px;}
+.nav-logo-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:2px 7px;border-radius:2px;margin-left:4px;}
+.nav-right{display:flex;align-items:center;gap:24px;}
+.nav-hint{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);}
+
+/* HERO */
+.hero{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--border);
+}
+.hero-l{
+  padding:72px 64px 72px 48px;display:flex;flex-direction:column;
+  justify-content:center;border-right:1px solid var(--border);
+}
+.hero-kicker{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.hero-kicker::before{content:'';display:block;width:24px;height:1px;background:var(--gold);}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,5vw,68px);font-weight:500;line-height:1.0;letter-spacing:-0.02em;margin-bottom:20px;}
+.hero-h1 em{font-style:italic;color:var(--forest);}
+.hero-sub{font-size:15px;line-height:1.8;color:var(--muted);font-weight:300;max-width:440px;margin-bottom:36px;}
+.hero-sub strong{color:var(--ink);font-weight:500;}
+
+/* CONTEXT INPUTS */
+.context-panel{
+  padding:48px;display:flex;flex-direction:column;justify-content:center;gap:20px;
+  background:var(--bg2);
+}
+.ctx-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.ctx-desc{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5;}
+.ctx-field-wrap{display:flex;flex-direction:column;gap:10px;}
+.ctx-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ctx-field{display:flex;flex-direction:column;gap:5px;}
+.ctx-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);}
+.ctx-input{
+  padding:10px 13px;background:var(--bg);border:1px solid var(--border-med);
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);
+  border-radius:2px;transition:border-color 0.18s;
+  appearance:none;-webkit-appearance:none;
+}
+.ctx-input:focus{outline:none;border-color:var(--gold);}
+.ctx-input::placeholder{color:var(--faint);}
+.ctx-full{grid-column:1/-1;}
+.btn-apply{
+  margin-top:6px;padding:11px 22px;background:var(--forest);color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;border:none;cursor:pointer;
+  border-radius:2px;transition:background 0.18s;align-self:flex-start;
+}
+.btn-apply:hover{background:var(--forest-light);}
+.ctx-notice{font-size:11px;color:var(--muted);font-style:italic;margin-top:2px;}
+
+/* PHASE NAV */
+.phase-nav{
+  display:flex;align-items:stretch;border-bottom:1px solid var(--border);
+  overflow-x:auto;padding:0 48px;gap:0;
+  position:sticky;top:57px;background:var(--bg);z-index:100;
+}
+.phase-tab{
+  padding:16px 22px;font-size:12px;font-weight:500;
+  letter-spacing:0.05em;color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color 0.18s,border-color 0.18s;
+  background:transparent;border-left:none;border-right:none;border-top:none;
+  font-family:'DM Sans',sans-serif;
+}
+.phase-tab:hover{color:var(--ink);}
+.phase-tab.active{color:var(--forest);border-bottom-color:var(--gold);font-weight:500;}
+.phase-count{font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);margin-left:5px;}
+
+/* PHASE PANEL */
+.phase-panel{display:none;padding:56px 48px;}
+.phase-panel.active{display:block;}
+
+.phase-header{margin-bottom:40px;}
+.phase-eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.phase-eyebrow::before{content:'';display:block;width:18px;height:1px;background:var(--gold);}
+.phase-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,42px);font-weight:500;letter-spacing:-0.02em;line-height:1.1;margin-bottom:10px;}
+.phase-title em{font-style:italic;color:var(--forest);}
+.phase-desc{font-size:14px;color:var(--muted);line-height:1.7;max-width:640px;font-weight:300;}
+
+/* PROMPT GRID */
+.prompt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+
+.prompt-card{
+  border:1px solid var(--border);background:var(--bg);
+  border-radius:3px;overflow:hidden;
+  transition:border-color 0.18s,box-shadow 0.18s;
+}
+.prompt-card:hover{border-color:var(--border-strong);}
+
+.card-head{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:20px 22px 14px;border-bottom:1px solid var(--border);gap:12px;
+}
+.card-num{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;
+  color:var(--gold);min-width:28px;margin-top:2px;
+}
+.card-title{font-size:14px;font-weight:500;color:var(--ink);line-height:1.35;flex:1;}
+.card-copy{
+  padding:6px 10px;font-size:10px;font-family:'DM Mono',monospace;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);
+  background:transparent;border:1px solid var(--border-med);cursor:pointer;
+  border-radius:2px;transition:all 0.15s;white-space:nowrap;flex-shrink:0;
+}
+.card-copy:hover{border-color:var(--forest);color:var(--forest);}
+.card-copy.copied{border-color:var(--forest);color:var(--forest);background:rgba(44,74,53,0.06);}
+
+.card-body{padding:16px 22px 20px;}
+.card-prompt{
+  font-size:12px;line-height:1.72;color:var(--muted);font-weight:300;
+  white-space:pre-wrap;word-break:break-word;
+  font-family:'DM Mono',monospace;letter-spacing:0.01em;
+}
+.card-prompt .var{color:var(--gold);font-weight:500;}
+
+/* FOOTER */
+footer{
+  padding:22px 48px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-l{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--ink);}
+.footer-l span{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-left:8px;}
+.footer-r{font-size:11px;color:var(--faint);}
+
+@media(max-width:900px){
+  nav{padding:14px 20px;}
+  .hero{grid-template-columns:1fr;}
+  .hero-l{padding:56px 20px;border-right:none;border-bottom:1px solid var(--border);}
+  .context-panel{padding:32px 20px;}
+  .ctx-row{grid-template-columns:1fr;}
+  .phase-nav{padding:0 20px;}
+  .phase-panel{padding:40px 20px;}
+  .prompt-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;gap:8px;padding:18px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<nav>
+  <div class="nav-logo">
+    Talent AI Lab
+    <span class="nav-logo-badge">Prompt Library</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-hint">8 phases &nbsp;·&nbsp; 80 prompts</span>
+  </div>
+</nav>
+
+<!-- HERO + CONTEXT -->
+<div class="hero">
+  <div class="hero-l">
+    <div class="hero-kicker">Recruiting Intelligence · AI-Powered</div>
+    <h1 class="hero-h1">Your full-cycle<br>recruiting prompt<br><em>library</em></h1>
+    <p class="hero-sub">
+      Eight phases of the recruiting lifecycle — each with 10 deep, structured prompts. Fill in your context on the right, then copy any prompt directly into your AI tool of choice. <strong>Every prompt adapts to your role, level, and locations.</strong>
+    </p>
+  </div>
+
+  <div class="context-panel">
+    <div>
+      <div class="ctx-title">Set your context</div>
+      <div class="ctx-desc">Fill in the fields below. Every prompt will use these values wherever you see a <span style="color:var(--gold);font-family:'DM Mono',monospace;font-size:11px;">[variable]</span>. You can also edit any prompt directly after copying.</div>
+    </div>
+    <div class="ctx-field-wrap">
+      <div class="ctx-row">
+        <div class="ctx-field">
+          <label class="ctx-label">Role / Job title</label>
+          <input class="ctx-input" id="ctx-role" type="text" placeholder="e.g. ML Research Scientist">
+        </div>
+        <div class="ctx-field">
+          <label class="ctx-label">Level / Seniority</label>
+          <input class="ctx-input" id="ctx-level" type="text" placeholder="e.g. Senior, VP, Staff">
+        </div>
+      </div>
+      <div class="ctx-row">
+        <div class="ctx-field">
+          <label class="ctx-label">Location(s)</label>
+          <input class="ctx-input" id="ctx-location" type="text" placeholder="e.g. Bay Area, New York, Remote">
+        </div>
+        <div class="ctx-field">
+          <label class="ctx-label">Hiring volume</label>
+          <input class="ctx-input" id="ctx-volume" type="text" placeholder="e.g. 3 hires, 10 hires">
+        </div>
+      </div>
+      <div class="ctx-row">
+        <div class="ctx-field">
+          <label class="ctx-label">Timeframe</label>
+          <input class="ctx-input" id="ctx-timeframe" type="text" placeholder="e.g. 90 days, Q3 2026">
+        </div>
+        <div class="ctx-field">
+          <label class="ctx-label">Target companies</label>
+          <input class="ctx-input" id="ctx-companies" type="text" placeholder="e.g. Google, OpenAI, Meta">
+        </div>
+      </div>
+      <div class="ctx-field ctx-full">
+        <label class="ctx-label">Business context (optional)</label>
+        <input class="ctx-input" id="ctx-context" type="text" placeholder="e.g. Building agentic AI platform, scaling LLM inference team">
+      </div>
+      <button class="btn-apply" onclick="applyContext()">Apply context to all prompts</button>
+      <div class="ctx-notice">Context is applied locally — nothing is sent anywhere.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE TABS -->
+<div class="phase-nav" id="phaseNav">
+  <button class="phase-tab active" onclick="switchPhase(0)">Market Intelligence<span class="phase-count">10</span></button>
+  <button class="phase-tab" onclick="switchPhase(1)">Intake<span class="phase-count">10</span></button>
+  <button class="phase-tab" onclick="switchPhase(2)">Sourcing Strategy<span class="phase-count">10</span></button>
+  <button class="phase-tab" onclick="switchPhase(3)">Outreach<span class="phase-count">10</span></button>
+  <button class="phase-tab" onclick="switchPhase(4)">Screening<span class="phase-count">10</span></button>
+  <button class="phase-tab" onclick="switchPhase(5)">Interview<span class="phase-count">10</span></button>
+  <button class="phase-tab" onclick="switchPhase(6)">Offer & Close<span class="phase-count">10</span></button>
+  <button class="phase-tab" onclick="switchPhase(7)">Insights Loop<span class="phase-count">10</span></button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PHASE 1 — MARKET INTELLIGENCE
+════════════════════════════════════════════ -->
+<div class="phase-panel active" id="phase0">
+  <div class="phase-header">
+    <div class="phase-eyebrow">Phase 01</div>
+    <h2 class="phase-title">Market <em>Intelligence</em></h2>
+    <p class="phase-desc">Understand the talent market before you start. These prompts map supply, demand, competition, compensation pressure, and the hidden pools that shape every search.</p>
+  </div>
+  <div class="prompt-grid" id="grid0"></div>
+</div>
+
+<!-- PHASE 2 — INTAKE -->
+<div class="phase-panel" id="phase1">
+  <div class="phase-header">
+    <div class="phase-eyebrow">Phase 02</div>
+    <h2 class="phase-title">Role <em>Intake</em></h2>
+    <p class="phase-desc">Turn a hiring manager's request into a search-ready brief. Define must-haves, calibrate level, design the scorecard, and build the success profile.</p>
+  </div>
+  <div class="prompt-grid" id="grid1"></div>
+</div>
+
+<!-- PHASE 3 — SOURCING -->
+<div class="phase-panel" id="phase2">
+  <div class="phase-header">
+    <div class="phase-eyebrow">Phase 03</div>
+    <h2 class="phase-title">Sourcing <em>Strategy</em></h2>
+    <p class="phase-desc">Map where the talent is, which channels work, and how to sequence your search for maximum pipeline quality in minimum time.</p>
+  </div>
+  <div class="prompt-grid" id="grid2"></div>
+</div>
+
+<!-- PHASE 4 — OUTREACH -->
+<div class="phase-panel" id="phase3">
+  <div class="phase-header">
+    <div class="phase-eyebrow">Phase 04</div>
+    <h2 class="phase-title">Candidate <em>Outreach</em></h2>
+    <p class="phase-desc">Write outreach that sounds like a person, not a template. Tailored by background, motivated by substance, built to convert passive talent.</p>
+  </div>
+  <div class="prompt-grid" id="grid3"></div>
+</div>
+
+<!-- PHASE 5 — SCREENING -->
+<div class="phase-panel" id="phase4">
+  <div class="phase-header">
+    <div class="phase-eyebrow">Phase 05</div>
+    <h2 class="phase-title">Candidate <em>Screening</em></h2>
+    <p class="phase-desc">Evaluate résumés and phone screens with rigour. Distinguish real depth from keyword inflation and build evidence-based assessments the hiring team can trust.</p>
+  </div>
+  <div class="prompt-grid" id="grid4"></div>
+</div>
+
+<!-- PHASE 6 — INTERVIEW -->
+<div class="phase-panel" id="phase5">
+  <div class="phase-header">
+    <div class="phase-eyebrow">Phase 06</div>
+    <h2 class="phase-title">Interview <em>Design</em></h2>
+    <p class="phase-desc">Design loops that surface real signal. Map competencies to rounds, build rubrics, and brief panels so every interviewer knows exactly what they own.</p>
+  </div>
+  <div class="prompt-grid" id="grid5"></div>
+</div>
+
+<!-- PHASE 7 — OFFER -->
+<div class="phase-panel" id="phase6">
+  <div class="phase-header">
+    <div class="phase-eyebrow">Phase 07</div>
+    <h2 class="phase-title">Offer &amp; <em>Close</em></h2>
+    <p class="phase-desc">Close with confidence. Predict acceptance risk, defend against counteroffers, write the scripts, and build the strategy that turns offers into starts.</p>
+  </div>
+  <div class="prompt-grid" id="grid6"></div>
+</div>
+
+<!-- PHASE 8 — INSIGHTS -->
+<div class="phase-panel" id="phase7">
+  <div class="phase-header">
+    <div class="phase-eyebrow">Phase 08</div>
+    <h2 class="phase-title">Insights <em>Loop</em></h2>
+    <p class="phase-desc">Diagnose the funnel, analyze what's working, and produce the operating reviews and forecasts that turn data into better decisions.</p>
+  </div>
+  <div class="prompt-grid" id="grid7"></div>
+</div>
+
+<footer>
+  <div class="footer-l">Rosy Bhullar <span>Talent AI Lab</span></div>
+  <div class="footer-r">8 phases · 80 prompts · Full-cycle recruiting intelligence</div>
+</footer>
+
+<script>
+// ── PROMPT DATA ──────────────────────────────────────────────────
+var phases = [
+  {
+    prompts: [
+      { title:"Market map by location", body:`You are a talent market strategist. Analyze the market for [ROLE] at [LEVEL] across [LOCATIONS].
+
+In your analysis:
+- Segment the market into LLM/AI research, applied AI, ML infrastructure, and AI platform engineering
+- Estimate which locations have the strongest talent density for each segment
+- Identify which cities are best for senior talent versus scalable mid-level hiring
+- Distinguish between markets that are prestige-driven versus problem/scale-driven
+- Identify the top tradeoffs by city: competition, talent quality, speed, retention risk
+
+Output:
+1. Executive summary
+2. City-by-city breakdown
+3. Recommended priority cities
+4. Risks by city
+5. Final hiring recommendation` },
+      { title:"Supply vs demand pressure", body:`Analyze supply versus demand for [ROLE] in [LOCATIONS].
+
+You must:
+- Explain whether this market is talent-short, balanced, or oversaturated
+- Identify the main competitors pulling from the same talent pool
+- Explain whether competition is coming from Big Tech, startups, AI labs, or other sectors
+- Identify where hiring difficulty comes from low supply versus compensation inflation
+- Estimate how this affects time-to-fill and candidate expectations
+- Flag whether this role should be treated as a niche specialist search or a scalable volume search
+
+Return:
+1. Market diagnosis
+2. Biggest constraints
+3. Implications for recruiter strategy
+4. Recommended search posture` },
+      { title:"Location strategy recommendation", body:`Recommend the best location strategy for hiring [VOLUME] of [ROLE] within [TIMEFRAME].
+
+Consider:
+- Which locations offer premium or senior talent
+- Which offer scalable technical hiring
+- Remote versus hub-based implications
+- Whether to centralize or diversify the search
+
+Return:
+1. Recommended hiring allocation by location
+2. Rationale for each location
+3. What type of talent to target in each location
+4. Risks if hiring is too concentrated
+5. Fallback plan if one region underperforms` },
+      { title:"Competitor pressure analysis", body:`Map the competitive landscape for [ROLE] in [LOCATIONS].
+
+Include:
+- Which competitors are strongest in attracting this talent
+- What those competitors likely offer that we do not
+- What we can credibly offer that they may not
+- Where candidates are most likely to leave for prestige, comp, research freedom, or speed
+- Which competitor backgrounds are most realistic to convert
+- Which are aspirational but unlikely
+
+Return:
+1. Competition tiers
+2. Realistic target-company list
+3. Hard-to-convert company list
+4. Recruiter messaging implications
+5. Close-risk implications` },
+      { title:"Compensation market framing", body:`Analyze compensation pressure for [ROLE] across [LOCATIONS].
+
+Do not fabricate exact cash numbers. Instead:
+- Classify each location as low, medium, high, or extreme comp pressure
+- Explain which competitors are likely setting the market
+- Identify where total comp expectations are most distorted by equity-heavy companies
+- Identify where we are more likely to compete on stability, scope, and complexity instead of pure upside
+- Explain how comp pressure should change sourcing, screening, and close strategy
+
+Output:
+1. Comp pressure by location
+2. What comp means for search strategy
+3. Likely offer risk by market
+4. Recommendation for where to search aggressively versus selectively` },
+      { title:"Mobility and relocation constraints", body:`Assess how mobility and relocation constraints affect the hiring strategy for [ROLE] in [LOCATIONS].
+
+Include:
+- Impact of relocation reluctance for senior talent in this field
+- Likelihood that strong candidates prefer to stay in current hubs
+- How work authorization friction may affect speed and conversion
+- Whether any locations can be used as strategic talent hubs
+
+Return:
+1. Key mobility constraints
+2. Recommended work model
+3. Search implications
+4. Risk mitigation recommendations` },
+      { title:"University and research pipeline", body:`Identify the strongest university, lab, and research-adjacent pipelines for [ROLE].
+
+Differentiate:
+- Academic research talent
+- Applied engineering talent
+- Infrastructure and platform talent
+- Emerging high-potential talent
+
+Return:
+1. Strongest institutions by talent type
+2. Expected candidate profile from each
+3. Conversion challenges
+4. Where recruiter messaging must differ` },
+      { title:"Hidden talent pools", body:`Identify overlooked or underused talent pools for [ROLE].
+
+Look beyond obvious Big Tech pipelines and include:
+- Adjacent industry teams
+- Strong second-tier companies and startups
+- Enterprise platform and infrastructure teams
+- Technically credible candidates without marquee-brand logos
+- Research engineers in less visible organizations
+
+Return:
+1. Hidden talent pools
+2. Why they are often overlooked
+3. Why they may convert better
+4. How to source them
+5. How to position the opportunity to them` },
+      { title:"Define top-tier talent signals", body:`Define what top 10 percent talent looks like for [ROLE] at [LEVEL].
+
+Cover:
+- Depth indicators
+- Scope and scale indicators
+- Ownership signals
+- Technical credibility signals
+- Misleading signals that recruiters often overweight
+- What separates top talent from candidates who only sound strong
+
+Return:
+1. Positive signals
+2. Weak or inflated signals
+3. Recruiter screening implications
+4. Interview implications` },
+      { title:"Executive market recommendation", body:`Create an executive-ready hiring strategy for [ROLE] with the goal of hiring [VOLUME] in [TIMEFRAME].
+
+Must include:
+- Recommended locations and rationale
+- What talent type to hire in each location
+- Realistic search risks
+- Speed and competition implications
+- What the business should expect
+- What would make this plan fail
+- What backup plan should be activated if pipeline underperforms` }
+    ]
+  },
+  {
+    prompts: [
+      { title:"Translate business need into role", body:`You are a recruiting intake strategist. Convert the following hiring manager request into a realistic role definition for [ROLE].
+
+Input:
+- Business problem: [CONTEXT]
+- Desired outcomes: [describe]
+- Manager notes: [describe]
+- Known market constraints: [describe]
+
+Your job:
+- Identify what the business actually needs
+- Separate business outcomes from wishlist skills
+- Define the real scope of the role
+- Identify whether this is research, applied, infrastructure, platform, or hybrid
+- Flag where the manager is combining multiple roles into one
+
+Return:
+1. Business problem translation
+2. Role category
+3. Must-have capabilities
+4. Nice-to-have capabilities
+5. Overscoping risks
+6. Recommended role definition` },
+      { title:"Must-have vs nice-to-have ranking", body:`Take this draft role definition for [ROLE] and force-rank requirements into:
+- True must-have
+- Strong plus
+- Optional
+- Likely harmful if required
+
+Explain:
+- Why each skill belongs in its category
+- Which requirements are most likely to kill pipeline
+- Which requirements can be assessed during onboarding rather than at hire
+- Which requirements are often confused with one another
+
+Return a final list the recruiter can use in search calibration.` },
+      { title:"Level calibration", body:`Calibrate the requested level for [ROLE] against the market.
+
+Assess:
+- Whether the manager is asking for senior-level work at a lower-level compensation
+- Whether the scope matches the title
+- Whether the decision rights described are realistic for the level
+- Whether the search would open materially if level were broadened
+- What equivalent talent may call themselves at Big Tech, startups, or other sectors
+
+Return:
+1. Current level assessment
+2. Market-equivalent levels
+3. Risks of keeping level too narrow
+4. Recommended level strategy` },
+      { title:"Success profile by milestone", body:`Build a success profile for [ROLE] at:
+- 30 days
+- 90 days
+- 6 months
+- 12 months
+
+Focus on:
+- What the person should understand
+- What they should deliver
+- What relationships they should establish
+- How impact should be measured
+- What failure would look like
+
+Return a success profile usable in intake, interviewing, and closing.` },
+      { title:"Competency scorecard design", body:`Create a competency-based scorecard for [ROLE].
+
+Include:
+- Technical depth
+- Business impact
+- Execution and delivery
+- Ambiguity handling
+- Collaboration
+- Domain adaptability
+- Leadership (if relevant)
+
+For each competency:
+- Define what strong evidence looks like
+- Define what weak evidence looks like
+- Explain how it should be assessed
+- Recommend weighting
+
+Return a final structured scorecard.` },
+      { title:"Alternative candidate profiles", body:`Identify 2 to 3 alternative profiles that could solve the same business problem if the ideal profile for [ROLE] proves too narrow.
+
+For each alternative:
+- Explain where they may come from
+- What strengths they bring
+- What gaps they may have
+- How onboarding could compensate
+- How search strategy would change` },
+      { title:"Interview architecture design", body:`Create the interview architecture for [ROLE].
+
+You must:
+- Map each competency to a stage
+- Avoid duplicated coverage
+- Recommend panel composition
+- Specify what each interviewer is accountable for
+- Explain where the bar should be highest
+- Identify where false negatives are most likely
+
+Return:
+1. Interview stages
+2. Panel makeup
+3. Competency ownership
+4. Calibration notes` },
+      { title:"Bias and feasibility check", body:`Review this role definition for [ROLE] for:
+- Pedigree bias or over-indexing on brand-name employers
+- Unrealistic depth and breadth expectations
+- Hidden location or work-authorization bias
+- Language that may reduce pipeline quality
+- Any single requirement that alone eliminates large qualified pools
+
+Return:
+1. Issues found
+2. Why they matter
+3. Revised role definition
+4. Recruiter briefing note` },
+      { title:"Hiring manager briefing note", body:`Create a concise but high-value briefing note for the recruiter supporting [ROLE].
+
+Include:
+- Business context
+- What winning talent looks like
+- What to deprioritize
+- Key competitors
+- Likely candidate objections
+- Places this search can go wrong
+- What the hiring manager must do to help` },
+      { title:"Final intake package", body:`Produce the final intake package for [ROLE].
+
+Include:
+1. Role summary
+2. Must-haves
+3. Nice-to-haves
+4. Success profile
+5. Competency scorecard
+6. Interview design
+7. Target company guidance
+8. Candidate risk areas
+9. Final recruiter search notes` }
+    ]
+  },
+  {
+    prompts: [
+      { title:"Full sourcing strategy", body:`Build a sourcing strategy for [ROLE] at [LEVEL] using the following inputs:
+- Target locations: [LOCATIONS]
+- Must-have skills: [describe]
+- Target companies: [COMPANIES]
+- Hiring volume: [VOLUME]
+- Timeframe: [TIMEFRAME]
+
+You must:
+- Segment the talent market precisely
+- Recommend best channels by segment
+- Explain where passive talent is most reachable
+- Recommend which parts of the market to prioritize first
+- Build a 30/60/90 day sourcing plan
+
+Return:
+1. Target segments
+2. Sourcing channels
+3. Company priorities
+4. Search sequencing
+5. Funnel targets` },
+      { title:"Company mapping by tier", body:`Create a company map for the [ROLE] search.
+
+Break companies into:
+- Top-priority realistic targets
+- Stretch targets
+- Adjacent targets
+- Likely poor-conversion targets
+
+Explain:
+- Why each group belongs there
+- What type of talent each group yields
+- Likely conversion barriers
+- How recruiter messaging should differ by group` },
+      { title:"Channel strategy", body:`Recommend the best sourcing channels for [ROLE] in [LOCATIONS].
+
+Compare:
+- LinkedIn
+- GitHub
+- Conference follow-up lists
+- Referrals
+- Academic networks
+- Professional communities
+- Prior silver-medalist pipeline
+- Internal mobility if relevant
+
+Return:
+1. Best channels by talent segment
+2. Why each channel works
+3. Expected strengths and weaknesses
+4. How to sequence channel investment` },
+      { title:"Candidate archetypes", body:`Create detailed candidate archetypes for [ROLE].
+
+For each archetype include:
+- Likely background and employer types
+- Likely motivations
+- Likely objections
+- Likely work-model preferences
+- Best sourcing channel
+- Best outreach angle
+
+Create archetypes for at least:
+1. Big Tech candidate
+2. Startup candidate
+3. Adjacent industry candidate
+4. Research-adjacent candidate
+5. Hidden-talent candidate` },
+      { title:"Sourcing focus by location", body:`Create separate sourcing guidance for each of these locations: [LOCATIONS].
+
+For each location:
+- What talent is strongest there
+- Which companies to prioritize
+- How competitive the market is
+- What message is likely to resonate
+- What conversion risk exists
+- Whether to use for senior-only or broader hiring` },
+      { title:"Referral strategy", body:`Create a referral strategy for [ROLE].
+
+Include:
+- Which internal groups should be activated
+- Which external referrer profiles may be highest value
+- How to brief employees on who to refer
+- How to avoid low-signal referrals
+- How to position urgency and value to potential referrers` },
+      { title:"Search-string logic", body:`Generate search logic for [ROLE].
+
+Do not just provide keywords. Also explain:
+- Which terms correlate with real signal
+- Which terms create noise
+- How to search differently for research, applied, and infrastructure talent
+- How to avoid overfitting to one employer or one title
+- Recommended Boolean logic structure with examples` },
+      { title:"Weekly sourcing sprint plan", body:`Build a 6-week sourcing sprint plan for [ROLE].
+
+Include:
+- Weekly goals
+- Channel allocation
+- Target output per week
+- How to test and refine search assumptions
+- When to pivot if response or conversion is weak` },
+      { title:"Silver medalist reactivation", body:`Design a silver medalist reactivation strategy for [ROLE].
+
+Include:
+- How to identify the right prior candidates to reactivate
+- What has likely changed since they last engaged
+- How to re-approach without sounding mechanical
+- What new information about the role or team may matter to them
+- When reactivation is unlikely to work and should not be attempted` },
+      { title:"Full sourcing playbook", body:`Create the final sourcing playbook for [ROLE].
+
+It should include:
+1. Target segments
+2. Target companies
+3. Locations: [LOCATIONS]
+4. Channels
+5. Search sequence
+6. Referral motion
+7. Funnel targets
+8. First 30-day priorities
+9. Failure signals and pivot triggers` }
+    ]
+  },
+  {
+    prompts: [
+      { title:"Personalized first-touch outreach", body:`Write a high-conviction first-touch outreach message for a candidate being considered for [ROLE].
+
+Based on:
+- Their current role and background
+- Likely motivations
+- Likely objections
+- Why this specific role is compelling
+
+Requirements:
+- Make it feel tailored and informed
+- Avoid generic phrases like "exciting opportunity"
+- Show why this candidate was specifically selected
+- Position the role around substance, not hype
+
+Produce:
+1. Email version
+2. LinkedIn InMail version
+3. Short version under 300 characters` },
+      { title:"Big Tech conversion message", body:`Write outreach for a candidate coming from [COMPANIES] for [ROLE].
+
+You must address:
+- Why they would consider leaving a stronger brand
+- Why this role offers meaningful scale, complexity, or business relevance
+- What objections they are likely to have
+- How to keep the message credible without overselling
+
+Write one email and one InMail version.` },
+      { title:"Startup candidate conversion message", body:`Write outreach for a candidate from a startup background for [ROLE].
+
+Address:
+- Why they may be hesitant about a larger organization
+- What parts of this opportunity may still appeal to them
+- How to position scale, data, and long-horizon impact
+- How to avoid sounding bureaucratic
+
+Write one email and one InMail version.` },
+      { title:"Senior passive 4-touch sequence", body:`Create a 4-touch outreach sequence for a senior passive candidate for [ROLE].
+
+Touchpoints should include:
+1. First message — lead with relevance, not the ask
+2. Value-add follow-up — share something genuinely useful
+3. Role-specific credibility follow-up — tie their work to this problem
+4. Respectful close-the-loop message
+
+Tone: polished, credible, non-desperate.
+Include recommended timing between each touch.` },
+      { title:"Motivation-mapped outreach", body:`Based on a candidate's background, predict:
+- What likely motivates them at this stage of their career
+- What they likely want next
+- What they may fear about a move
+- What recruiter angle is most likely to work
+
+Then write a tailored outreach message for [ROLE] based on those predictions.` },
+      { title:"Technical work personalization", body:`Write outreach that references a candidate's visible technical work (GitHub project, publication, conference talk, or product contribution) for [ROLE].
+
+Use:
+- A specific piece of their work as the opening reference
+- How that work connects directly to the problem this role solves
+- Why their particular experience makes them a credible fit
+
+Do not sound generic or like you are scanning profiles.` },
+      { title:"Objection-aware outreach", body:`Create outreach for a candidate for [ROLE] who is likely to object on one or more of these grounds:
+- Compensation
+- Brand recognition
+- Speed of innovation
+- Flexibility or work model
+
+Write the message so it anticipates — but does not defensively overexplain — those objections.` },
+      { title:"Multi-channel outreach sequence", body:`Create a multi-channel outreach plan for a candidate for [ROLE].
+
+Include:
+1. Initial email — content, timing, goal
+2. LinkedIn follow-up — content, timing, goal
+3. Second email — content, timing, goal
+4. Optional call or voicemail script
+
+Include recommended timing and purpose for each touch.` },
+      { title:"Recruiter talk track", body:`Create a recruiter talk track for a candidate call for [ROLE].
+
+It should cover:
+- Why this role matters and why now
+- Why the team and scope are credible
+- Why this candidate is relevant
+- How this compares to alternatives they may be considering
+- The first 2 questions to ask to qualify genuine interest` },
+      { title:"Full outreach package", body:`Produce the complete outreach package for a candidate for [ROLE]:
+
+1. Tailored first-touch email
+2. Tailored InMail
+3. 3-step follow-up sequence with timing
+4. Recruiter call script
+5. Likely objections and how to handle each
+6. What not to say
+7. Recommended close if they reply positively` }
+    ]
+  },
+  {
+    prompts: [
+      { title:"Evidence-based résumé screen", body:`Evaluate this candidate against [ROLE].
+
+Do not summarize loosely. Instead:
+- Map résumé claims to must-have criteria
+- Distinguish exposure from ownership
+- Identify where evidence is strong versus assumed
+- Evaluate scale, complexity, and business impact
+- Flag whether the candidate is stronger in research, applied, or infrastructure
+- Identify gaps that actually matter
+
+Return:
+1. Evidence-based summary
+2. Strengths
+3. Material gaps
+4. Risk areas
+5. Recommendation` },
+      { title:"Real vs inflated technical signal", body:`Determine whether this candidate has:
+- Real technical depth for [ROLE]
+- Adjacent but overstated experience
+- Shallow keyword-compliant experience
+- Strong engineering with limited domain depth
+- Strong domain knowledge with limited production depth
+
+Explain exactly why, with reference to specific résumé evidence.` },
+      { title:"Production-scale credibility check", body:`Assess whether this candidate has real production-scale experience relevant to [ROLE].
+
+Look for:
+- Deployment ownership
+- Monitoring and iteration responsibility
+- Operational complexity
+- Stakeholder integration
+- System tradeoff awareness
+- Evidence of end-to-end delivery
+
+Distinguish between:
+- Built a prototype
+- Contributed to a production system
+- Owned a production system` },
+      { title:"Recruiter phone screen design", body:`Generate the recruiter phone screen guide for a candidate for [ROLE].
+
+Include:
+1. Opening questions
+2. Validation questions (mapped to must-haves)
+3. Depth-testing questions
+4. Motivation and career direction questions
+5. Logistics questions
+6. Red flags to listen for
+7. Positive signals to listen for` },
+      { title:"Compare two candidates", body:`Compare Candidate A and Candidate B for [ROLE].
+
+You must:
+- Compare against the scorecard, not general impression
+- Identify where each is stronger
+- Identify hidden risks in each
+- Identify which candidate is more likely to convert
+- Recommend who should move forward first and why` },
+      { title:"Career trajectory assessment", body:`Assess this candidate's career trajectory in the context of [ROLE].
+
+Include:
+- Whether progression is strong, flat, or unclear
+- Whether role moves make strategic sense
+- Whether scope appears to be increasing
+- Whether the résumé suggests substance or signaling
+- Whether the candidate appears to be plateauing` },
+      { title:"Enterprise vs startup fit assessment", body:`Assess how this candidate may perform in a structured, regulated, or large-scale environment relevant to [ROLE].
+
+Do not reduce this to culture fit. Instead assess:
+- Ambiguity handling
+- Cross-functional maturity
+- Governance tolerance
+- Execution discipline
+- Whether they may chafe at structure
+- Whether they may actually strengthen the environment` },
+      { title:"Bias-aware candidate evaluation", body:`Review this candidate evaluation for [ROLE] for possible bias.
+
+Check for:
+- Over-indexing on brand-name employers
+- Discounting nontraditional career paths
+- Penalizing job titles instead of actual scope
+- Halo effects from school or company name
+- Assuming weakness where evidence is simply absent
+
+Return a revised, more grounded evaluation.` },
+      { title:"Interview focus builder", body:`Build the interview focus areas for this candidate applying for [ROLE].
+
+Specify:
+- What must be validated
+- What stated strengths should be pressure-tested
+- What risk areas need explicit interview coverage
+- Which interviewers should own each validation point` },
+      { title:"Final screening package", body:`Produce the final screening package for the hiring team for [ROLE]:
+
+1. Concise candidate summary
+2. Match assessment against scorecard
+3. Evidence of depth
+4. Risks and gaps
+5. Recommended next step
+6. Interview focus areas
+7. Recruiter notes
+8. Confidence level` }
+    ]
+  },
+  {
+    prompts: [
+      { title:"Full interview loop design", body:`Design the interview loop for [ROLE] at [LEVEL].
+
+You must:
+- Map every competency to a round
+- Avoid duplicate coverage
+- Identify which areas need the strongest signal
+- Recommend panel composition
+- Ensure the loop is rigorous but not bloated
+
+Return:
+1. Interview stages
+2. Interviewer ownership
+3. Competencies per stage
+4. Evidence expectations` },
+      { title:"Technical round design", body:`Create the technical interview round for [ROLE].
+
+Include:
+- What the interviewer should test
+- Primary question set
+- Probing follow-ups
+- What strong answers look like
+- What weak answers look like
+- What false positives to avoid` },
+      { title:"System or domain design round", body:`Create a domain or system design interview aligned to [ROLE].
+
+Make the prompt realistic for the actual work involved. Include:
+- Core design challenge
+- Expected scope of answer
+- Strong answer indicators
+- Weak answer indicators
+- Common misconceptions that would eliminate a candidate
+- Follow-up probes
+- Scoring rubric` },
+      { title:"Behavioral and leadership round", body:`Build a behavioral interview for [ROLE] at [LEVEL].
+
+Focus on:
+- Influence without authority
+- Collaboration under pressure
+- Navigating ambiguity
+- Conflict resolution
+- Ownership of outcomes
+- Learning velocity
+- Decision quality under constraints
+
+Tie each question to the real context of this role. Avoid generic behavioral questions.` },
+      { title:"Candidate-specific interview tailoring", body:`Using this candidate's screen summary, tailor the interview plan for [ROLE].
+
+Identify:
+- Where the candidate looks strongest
+- Where they may be overstating experience
+- Where the panel should pressure-test
+- What could become a false negative if interviewers are not careful` },
+      { title:"Scoring rubric creation", body:`Create a scoring rubric for the full interview loop for [ROLE].
+
+For each competency define:
+- Strong evidence — what it looks like
+- Mixed evidence — what it looks like
+- Weak evidence — what it looks like
+- Hard no-hire indicators
+- When interviewers should escalate uncertainty instead of guessing` },
+      { title:"Interviewer prep guide", body:`Create an interviewer prep guide for a panelist in the [ROLE] loop.
+
+Include:
+- What this interviewer specifically owns
+- What they should not spend time on
+- Top questions with intent
+- Follow-up probes
+- Signs of strong signal
+- Signs of weak signal
+- Note-taking guidance` },
+      { title:"Debrief structure design", body:`Design the debrief process for the [ROLE] interview loop.
+
+The debrief must:
+- Force evidence over opinion
+- Separate concerns from disqualifiers
+- Identify whether gaps are trainable or fatal
+- Prevent one strong personality from dominating
+- Drive a clear, documented decision` },
+      { title:"Bias check in interview design", body:`Review the interview loop for [ROLE] for bias and calibration risk.
+
+Check for:
+- Duplicate rounds that waste candidate time
+- Prestige or style bias
+- Over-rotating on presentation fluency
+- Under-testing real-world execution
+- Unfair penalties for nontraditional but strong profiles
+- Questions that may correlate with demographic rather than ability
+
+Return revised loop and recruiter briefing note.` },
+      { title:"Final panel packet", body:`Produce the final panel packet for the [ROLE] interview team:
+
+1. Role summary
+2. Scorecard
+3. Round ownership map
+4. Questions per round
+5. Rubric
+6. Red flags
+7. Decision criteria
+8. Debrief template` }
+    ]
+  },
+  {
+    prompts: [
+      { title:"Hire and close recommendation", body:`Based on the full interview record, create a hire and close recommendation for [ROLE].
+
+You must:
+- Summarize why this candidate should or should not be hired
+- Identify the strongest reasons they may accept
+- Identify the strongest reasons they may decline
+- Distinguish hire quality from close risk
+- Recommend the close strategy` },
+      { title:"Acceptance probability reasoning", body:`Estimate the likelihood this candidate accepts an offer for [ROLE].
+
+Do not just output a number. Explain:
+- What signals increase likelihood
+- What signals reduce likelihood
+- What competitors may be in play
+- Whether the candidate is truly motivated or simply curious
+- What would materially improve acceptance odds` },
+      { title:"Comp-sensitive close strategy", body:`Create a close strategy for a candidate who is likely to be highly compensation-sensitive for [ROLE].
+
+Address:
+- How the recruiter should frame the opportunity
+- What the hiring manager should emphasize
+- How to avoid losing credibility if comp is not top-of-market
+- What non-cash dimensions may still matter
+- What signals indicate the search is already at risk` },
+      { title:"Counteroffer defense strategy", body:`Create a counteroffer defense strategy for a candidate for [ROLE] who may receive a competing offer.
+
+Include:
+- What the candidate may be tempted by
+- What we can credibly offer in comparison
+- How to differentiate before the offer is extended
+- What the hiring manager should say
+- What the recruiter should avoid saying` },
+      { title:"Candidate concern prediction", body:`Predict this candidate's likely top 5 concerns about accepting an offer for [ROLE] based on their background and interview behavior.
+
+For each concern:
+- Explain why it matters
+- Define how the recruiter should address it
+- Define how the hiring manager should address it
+- Define whether it is negotiable or structural` },
+      { title:"Offer call scripts", body:`Write both the recruiter offer call script and the hiring manager close call script for [ROLE].
+
+Each should include:
+- Opening
+- Core narrative
+- How to test enthusiasm
+- How to surface hidden blockers
+- How to maintain momentum
+- Next-step close` },
+      { title:"Offer risk assessment", body:`Assess this offer scenario for [ROLE] for risk.
+
+Include risk analysis on:
+- Compensation
+- Timing
+- Brand or prestige
+- Title and scope
+- Hiring manager relationship
+- Process fatigue
+- Work model or location
+
+Recommend mitigation for each.` },
+      { title:"Retention-aware offer strategy", body:`Create an offer strategy for [ROLE] that optimizes not just acceptance but long-term retention.
+
+Consider:
+- Whether the role is genuinely aligned to candidate motivation
+- Whether candidate expectations may exceed reality
+- Where mismatch may lead to early regret
+- What needs to be clarified before the offer is extended` },
+      { title:"Approval stakeholder summary", body:`Create an executive summary for approval stakeholders for an offer on [ROLE].
+
+Include:
+- Why this candidate is worth hiring
+- Key strengths
+- Known risks
+- Why urgency matters
+- What happens if the candidate is lost
+- What backup options exist` },
+      { title:"Final offer package", body:`Produce the final offer package for [ROLE]:
+
+1. Hire recommendation
+2. Acceptance-risk analysis
+3. Close strategy
+4. Recruiter call script
+5. Hiring manager call script
+6. Counteroffer plan
+7. Fallback plan
+8. Overall confidence level` }
+    ]
+  },
+  {
+    prompts: [
+      { title:"Funnel diagnosis", body:`Analyze the recruiting funnel for [ROLE].
+
+Go beyond surface metrics. Identify:
+- Where conversion drops most sharply
+- Why that drop is likely happening
+- Whether the cause is sourcing, screening, interview design, compensation, or speed
+- Whether specific locations are underperforming
+- Whether certain candidate profiles are failing disproportionately
+
+Return:
+1. Diagnosis
+2. Root causes
+3. Corrective actions` },
+      { title:"Location performance analysis", body:`Compare funnel performance by location for [ROLE] across [LOCATIONS].
+
+Include for each:
+- Response rate
+- Recruiter screen pass rate
+- Interview pass rate
+- Offer acceptance rate
+- Time-to-fill
+- Likely reasons for performance
+
+Recommend whether each location should be expanded, maintained, or deprioritized.` },
+      { title:"Source quality analysis", body:`Analyze source effectiveness for [ROLE] using quality, not just volume.
+
+Compare:
+- Outbound sourcing
+- Referrals
+- Conferences and events
+- University or research pipelines
+- Internal talent pools
+- Silver medalists
+
+Return:
+1. Quality by source
+2. Conversion rate by source
+3. Efficiency by source
+4. Which sources should get more investment
+5. Which should be reduced` },
+      { title:"Calibration analysis", body:`Assess whether the funnel for [ROLE] is being damaged by poor calibration.
+
+Look for:
+- Too many false negatives at screen
+- Inconsistent interviewer scoring patterns
+- Debrief patterns that reject nontraditional but strong candidates
+- Mismatch between intake expectations and panel expectations
+- Interview loops that overweight polish over substance` },
+      { title:"Offer decline analysis", body:`Analyze offer declines for [ROLE] and identify patterns.
+
+Distinguish between declines caused by:
+- Compensation
+- Brand or prestige
+- Speed of process
+- Scope mismatch
+- Work model
+- Poor close strategy
+- Lack of hiring manager connection
+
+Recommend specific fixes by cause.` },
+      { title:"Search health forecast", body:`Forecast whether the current pipeline for [ROLE] can hit the target of [VOLUME] hires in [TIMEFRAME].
+
+Include:
+- Current pipeline sufficiency assessment
+- Stage-by-stage conversion assumptions
+- Where shortfall is most likely
+- What intervention is needed now
+- What happens if no change is made` },
+      { title:"Weekly operating review", body:`Generate a weekly operating review for recruiting leadership covering [ROLE].
+
+Include:
+- What changed this week
+- What improved
+- What got worse
+- Where the biggest risk sits
+- Which part of the process should be adjusted
+- Top 3 decisions leadership should make this week` },
+      { title:"Monthly executive summary", body:`Create a monthly executive summary for business and recruiting leadership on [ROLE].
+
+It must be brief but strategic:
+1. Hiring progress to target
+2. Market reality update
+3. Main funnel constraints
+4. What the business should expect next month
+5. What requires leadership action` },
+      { title:"Process improvement recommendations", body:`Based on the current state of this search for [ROLE], identify the top 5 process improvements.
+
+For each:
+- Describe the problem clearly
+- Explain the impact on pipeline or close rate
+- Recommend a specific change
+- Estimate how quickly the improvement would take effect` },
+      { title:"Final optimization plan", body:`Produce the final optimization plan for [ROLE].
+
+Include:
+1. Top process fixes
+2. Whether intake needs recalibration
+3. Whether sourcing needs to pivot
+4. Whether comp and close strategy needs adjustment
+5. What should be tested in the next 30 days
+6. Metrics to watch
+7. Decision triggers for escalating or changing strategy` }
+    ]
+  }
+];
+
+// ── CONTEXT STATE ──
+var ctx = {
+  role: '', level: '', location: '', volume: '',
+  timeframe: '', companies: '', context: ''
+};
+
+function applyContext() {
+  ctx.role      = document.getElementById('ctx-role').value.trim()      || '[ROLE]';
+  ctx.level     = document.getElementById('ctx-level').value.trim()     || '[LEVEL]';
+  ctx.location  = document.getElementById('ctx-location').value.trim()  || '[LOCATIONS]';
+  ctx.volume    = document.getElementById('ctx-volume').value.trim()    || '[VOLUME]';
+  ctx.timeframe = document.getElementById('ctx-timeframe').value.trim() || '[TIMEFRAME]';
+  ctx.companies = document.getElementById('ctx-companies').value.trim() || '[COMPANIES]';
+  ctx.context   = document.getElementById('ctx-context').value.trim()   || '[CONTEXT]';
+  renderAllGrids();
+  // Flash the tabs to signal update
+  document.querySelectorAll('.phase-tab').forEach(function(t){
+    t.style.color = 'var(--forest)';
+    setTimeout(function(){ t.style.color = ''; }, 600);
+  });
+}
+
+function resolvePrompt(text) {
+  return text
+    .replace(/\[ROLE\]/g, ctx.role)
+    .replace(/\[LEVEL\]/g, ctx.level)
+    .replace(/\[LOCATIONS\]/g, ctx.location)
+    .replace(/\[VOLUME\]/g, ctx.volume)
+    .replace(/\[TIMEFRAME\]/g, ctx.timeframe)
+    .replace(/\[COMPANIES\]/g, ctx.companies)
+    .replace(/\[CONTEXT\]/g, ctx.context);
+}
+
+function highlightVars(text) {
+  return text.replace(/\[[A-Z_]+\]/g, function(m) {
+    return '<span class="var">' + m + '</span>';
+  });
+}
+
+function renderGrid(phaseIdx) {
+  var grid = document.getElementById('grid' + phaseIdx);
+  if (!grid) return;
+  grid.innerHTML = '';
+  var prompts = phases[phaseIdx].prompts;
+  prompts.forEach(function(p, i) {
+    var resolved = resolvePrompt(p.body);
+    var card = document.createElement('div');
+    card.className = 'prompt-card';
+    card.innerHTML =
+      '<div class="card-head">' +
+        '<span class="card-num">P' + String(i+1).padStart(2,'0') + '</span>' +
+        '<span class="card-title">' + p.title + '</span>' +
+        '<button class="card-copy" id="copy-' + phaseIdx + '-' + i + '" onclick="copyPrompt(' + phaseIdx + ',' + i + ')">Copy</button>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-prompt">' + highlightVars(resolved) + '</div>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function renderAllGrids() {
+  for (var i = 0; i < phases.length; i++) renderGrid(i);
+}
+
+function copyPrompt(phaseIdx, promptIdx) {
+  var resolved = resolvePrompt(phases[phaseIdx].prompts[promptIdx].body);
+  navigator.clipboard.writeText(resolved).then(function() {
+    var btn = document.getElementById('copy-' + phaseIdx + '-' + promptIdx);
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1800);
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = resolved;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-' + phaseIdx + '-' + promptIdx);
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+}
+
+function switchPhase(idx) {
+  document.querySelectorAll('.phase-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.phase-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('phase' + idx).classList.add('active');
+  document.querySelectorAll('.phase-tab')[idx].classList.add('active');
+}
+
+// Initial render
+renderAllGrids();
+</script>
+
+</body>
+</html>
